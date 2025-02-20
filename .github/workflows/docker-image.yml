@@ -28,6 +28,9 @@ jobs:
         run: |
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
+      - name: Initialize Go Module  # 添加这个步骤
+        run: go mod init github.com/SkyDependence/tgDrive # 使用你的项目仓库地址作为模块路径
+
       - name: Build ARM binary
         run: |
           GOOS=linux GOARCH=arm GOARM=7 # 或者 arm64 如果你的目标是 arm64
