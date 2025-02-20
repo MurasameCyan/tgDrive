@@ -70,4 +70,4 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
 
       - name: Inspect ARM64 Docker Image Architecture
-        run: docker image inspect your-dockerhub-username/tgdrive-arm64:latest --format='{{.Architecture}} {{.Os}}'
+        run: docker image inspect yuzunyaa/tgdrivearm:latest --format='{{.Architecture}} {{.Os}}'
