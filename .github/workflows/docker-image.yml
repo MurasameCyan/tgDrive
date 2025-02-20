@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21' 
+          go-version: '1.21'
 
       - name: Install QEMU
         run: |
@@ -31,13 +31,14 @@ jobs:
       - name: Initialize Go Module
         run: go mod init github.com/SkyDependence/tgDrive
 
-      - name: Debug directory structure  
+      - name: Debug directory structure
         run: |
-          pwd 
-          ls -al 
+          pwd
+          ls -al
 
       - name: Build ARM binary
         run: |
+          cd src
           GOOS=linux GOARCH=arm GOARM=7
           export GOROOT_BOOTSTRAP=$GOROOT
           mkdir -p build/arm
