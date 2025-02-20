@@ -33,7 +33,6 @@ jobs:
 
       - name: Build ARM binary
         run: |
-          # cd ..  # 移除这一行 !!!
           GOOS=linux GOARCH=arm GOARM=7 # 或者 arm64 如果你的目标是 arm64
           export GOROOT_BOOTSTRAP=$GOROOT
           mkdir -p build/arm
