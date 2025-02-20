@@ -61,7 +61,7 @@ jobs:
         run: |
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME="your-dockerhub-username/tgdrive-arm64"
+          IMAGE_NAME="yuzunyaa/tgdrivearm"
           IMAGE_TAG=latest
           PLATFORM="linux/arm64"
 
