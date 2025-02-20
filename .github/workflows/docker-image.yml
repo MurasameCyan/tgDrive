@@ -1,4 +1,4 @@
-name: Build Java tgDrive (Maven)
+name: Build Java tgDrive (Maven) and Push Docker Image
 
 on:
   push:
@@ -36,3 +36,27 @@ jobs:
         with:
           name: tgDrive-java-jar
           path: target/*.jar
+
+  docker-push:
+    runs-on: ubuntu-latest
+    needs: build  # 依赖于 build job 完成
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tgDrive-java-jar
+          path: target/
+
+      - name: Build and Push Docker image
+        run: |
+          DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
+          IMAGE_NAME="yuzunyaa/tgdrivearm"
+          IMAGE_TAG=latest
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker push $IMAGE_NAME:$IMAGE_TAG
