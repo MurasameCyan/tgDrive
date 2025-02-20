@@ -68,6 +68,3 @@ jobs:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build --platform $PLATFORM -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
-
-      - name: Inspect ARM64 Docker Image Architecture
-        run: docker image inspect $IMAGE_NAME:$IMAGE_TAG --format='{{.Architecture}} {{.Os}}'
