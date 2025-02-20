@@ -53,8 +53,8 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
-          DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME="yuzunyaa/tgdrivearm"
           IMAGE_TAG=latest
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
