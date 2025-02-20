@@ -1,24 +1,11 @@
-# 使用ARM64的Python 3.9 Slim镜像
-FROM arm64v8/python:3.9-slim
+# 设置基础镜像
+FROM eclipse-temurin:17-jre-alpine
 
-# 设置工作目录
+# 设置工作目录为 /app
 WORKDIR /app
 
-# 安装必要的依赖项
-RUN apt-get update && apt-get install -y \
-    git \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# 将 JAR 文件复制到工作目录
+COPY target/tgDrive-0.0.8.jar app.jar
 
-# 克隆代码仓库
-RUN git clone https://github.com/SkyDependence/tgDrive.git ./
-
-# 安装Python依赖包
-RUN pip install -r requirements.txt
-
-# 设置环境变量
-ENV PYTHONUNBUFFERED=1
-
-# 运行命令
-CMD ["python3", "main.py"]
-
+# 容器启动时运行的命令
+CMD ["java", "-jar", "app.jar"]
