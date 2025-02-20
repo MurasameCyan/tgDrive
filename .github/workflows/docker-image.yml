@@ -40,10 +40,15 @@ jobs:
         run: |
           pwd
           ls -al
+
+          cd src/main
+          pwd
+          ls -al
+
           GOOS=linux GOARCH=arm GOARM=7
           export GOROOT_BOOTSTRAP=$GOROOT
           mkdir -p build/arm
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o build/arm/tgDrive ./src/main
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o build/arm/tgDrive ./
 
       - name: Upload ARM binary artifact
         uses: actions/upload-artifact@v4
