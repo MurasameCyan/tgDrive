@@ -39,10 +39,12 @@ jobs:
       - name: Build ARM binary
         run: |
           cd src
+          pwd
+          ls -al
           GOOS=linux GOARCH=arm GOARM=7
           export GOROOT_BOOTSTRAP=$GOROOT
           mkdir -p build/arm
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o build/arm/tgDrive .
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o build/arm/tgDrive github.com/SkyDependence/tgDrive
 
       - name: Upload ARM binary artifact
         uses: actions/upload-artifact@v4
