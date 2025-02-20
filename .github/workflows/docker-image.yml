@@ -2,34 +2,41 @@ name: Build ARM
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build-ARM:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
-      - name: Install QEMU and dependencies
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21' # 使用你项目需要的 Go 版本
+
+      - name: Install QEMU
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-user-static qemu-utils
-          sudo apt-get install -y build-essential
+          sudo apt-get install qemu-user-static -y
 
-      - name: Setup QEMU binfmt
+      - name: Set up ARM build environment
         run: |
-          sudo docker run --rm --privileged multiarch/qemu-user-static:register
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-      - name: Build for ARM
+      - name: Build ARM binary
         run: |
-          export CC=/usr/bin/arm-linux-gnueabi-gcc
-          export CXX=/usr/bin/arm-linux-gnueabi-g++
-          ./configure --host=arm-linux-gnueabi
-          make
+          GOOS=linux GOARCH=arm GOARM=7 # 或者 arm64 如果你的目标是 arm64
+          export GOROOT_BOOTSTRAP=$GOROOT
+          mkdir -p build/arm
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o build/arm/tgDrive .
 
-      - name: Upload artifact
+      - name: Upload ARM binary artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ARM-binary
-          path: ./path/to/binary
+          name: tgDrive-arm-binary
+          path: build/arm/tgDrive
