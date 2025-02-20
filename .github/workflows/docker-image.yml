@@ -1,4 +1,4 @@
-name: Build Java tgDrive (Maven) and Push Docker Image
+name: Build Java tgDrive (Maven) and Push ARM Docker Image
 
 on:
   push:
@@ -37,9 +37,9 @@ jobs:
           name: tgDrive-java-jar
           path: target/*.jar
 
-  docker-push:
+  docker-push-arm64:
     runs-on: ubuntu-latest
-    needs: build  # 依赖于 build job 完成
+    needs: build
 
     steps:
       - name: Checkout code
@@ -51,12 +51,23 @@ jobs:
           name: tgDrive-java-jar
           path: target/
 
-      - name: Build and Push Docker image
+      - name: Install QEMU for ARM64
+        run: |
+          sudo apt-get update
+          sudo apt-get install qemu-user-static -y
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+      - name: Build ARM64 Docker image
         run: |
           DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME="yuzunyaa/tgdrivearm"
+          IMAGE_NAME="your-dockerhub-username/tgdrive-arm64"
           IMAGE_TAG=latest
+          PLATFORM="linux/arm64"
+
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker build --platform $PLATFORM -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
+
+      - name: Inspect ARM64 Docker Image Architecture
+        run: docker image inspect your-dockerhub-username/tgdrive-arm64:latest --format='{{.Architecture}} {{.Os}}'
