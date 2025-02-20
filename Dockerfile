@@ -1,5 +1,6 @@
 # 设置基础镜像
-FROM eclipse-temurin:17-jre
+# FROM eclipse-temurin:17-jre
+FROM azul/zulu-openjdk-alpine:17-jre
 
 # 设置工作目录为 /app
 WORKDIR /app
